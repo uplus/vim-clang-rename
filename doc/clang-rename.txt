@@ -1,0 +1,113 @@
+*clang_rename.txt*					*clang_rename*
+
+Version: 1.0.0
+Author : uplus <uplus.e10 at gmail.com>
+License: MIT License
+
+
+==============================================================================
+CONTENTS						*clang-rename-contents*
+==============================================================================
+COMMANDS			|clang_rename-commands|
+FUNCTIONS			|clang_rename-functions|
+MAPPINGS			|clang_rename-mappings|
+VARIABLES			|clang_rename-variables|
+CHANGELOG			|clang_rename-changelog|
+
+
+==============================================================================
+INTRODUCTION					*clang_rename-introduction*
+
+Vim plugin for clang-rename, clang-rename is a C++ refactoring tool.
+
+Requirements:
+- clang-rename(extra command) https://clang.llvm.org/extra/clang-rename.html
+
+
+==============================================================================
+COMMANDS						*clang_rename-commands*
+
+:ClangRename [...]						*:ClangRename*
+	If number of argument is 0 or 1, execute |:ClangRenameCurrent|.
+	If number of argument is 2, execute  |:ClangRenameQualifiedName|.
+
+:ClangRenameCurrent [{new_name}]				*:ClangRenameCurrent*
+	Execute `:ClangRenameOffset -1 {new_name}`
+
+:ClangRenameOffset [{offset} [{new_name}]]			*:ClangRenameOffset*
+	Call |clang_rename#offset|.
+
+:ClangRenameQualifiedName [{qualified_name} [{new_name}]]	*:ClangRenameQualifiedName*
+	Call |clang_rename#qualified_name|.
+
+
+==============================================================================
+FUNCTIONS						*clang_rename-functions*
+
+clang_rename#rename({opts}, {new_name}, {files})	*clang_rename#rename*
+	Execute clang-rename command via |system()| and reload `{files}`.
+	`{opts}` is |List| of clang-rename's option.
+	`{new_name}` is |String|.
+	If `{new_name}` is empty string(`''`), Show prompt to input `{new_name}`.
+	`{files}` is |List| of target filenames.
+	If `{files}` is empty, Use current buffer name instead.
+	This function auto reload buffer of `{files}`.
+	Return value is the output of the clang-rename.
+
+clang_rename#offset({offset}, {new_name}, {files})	*clang_rename#offset*
+	Execute clang-rename with `'-offset'`.
+	`{offset}` is offset of the target symbol.
+	For example, offset of the beginning of the file is 0.
+	If `{offset}` is `-1`, Use cursor position instead.
+
+clang_rename#qualified_name({qualified_name}, {new_name}, {files})	*clang_rename#qualified_name*
+	Execute clang-rename with `'-qualified-name'`.
+	`{qualified_name}` is qualified_name of the target symbol.
+	If you want to use this function, The `clang-rename` command support
+	`'-qualified-name'` option.
+
+
+==============================================================================
+MAPPINGS						*clang_rename-mappings*
+
+<Plug>(clang_rename-current)			*<Plug>(clang_rename-current)*
+	Mapping to |ClangRenameCurrent|.
+
+
+==============================================================================
+VARIABLES						*clang_rename-variables*
+
+g:clang_rename#command				*g:clang_rename#command*
+	(Default: 'clang-rename')
+	|String| of the clang-rename command name.
+>
+	let g:clang_rename#command = 'clang-rename-3.8'
+<
+g:clang_rename#compile_flags			*g:clang_rename#compile_flags*
+	(Default: {})
+	Dictionay of compile flag by filetype.
+>
+	let g:clang_rename#compile_flags = {'cpp': '-std=c++14'}
+<
+g:clang_rename#default_compile_flags		*g:clang_rename#default_compile_flags*
+	(Default: see output of `:echo g:clang_rename#default_compile_flags`)
+
+b:clang_rename_compile_flags			*b:clang_rename_compile_flags*
+	(Default: [])
+
+g:clang_rename#flags				*g:clang_rename#flags*
+	(Default: [])
+	|List| of clang-rename's option.
+
+b:clang_rename_flags				*b:clang_rename_flags*
+	(Default: [])
+
+
+==============================================================================
+CHANGELOG					*clang_rename-changelog*
+
+1.0.0 2017-05-08
+	- Initial version
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:fdm=marker:
