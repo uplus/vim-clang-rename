@@ -7,6 +7,8 @@ command! -nargs=? ClangRenameCurrent call s:clang_rename_offset(-1, <q-args>)
 command! -nargs=* ClangRenameOffset call s:clang_rename_offset(<f-args>)
 command! -nargs=* ClangRenameQualifiedName call s:clang_rename_qualified_name(<f-args>)
 
+nnoremap <Plug>(clang_rename-current) :<C-u>ClangRenameCurrent<CR>
+
 function! s:clang_rename(...) abort "{{{
   if a:0 == 0
     ClangRenameCurrent
