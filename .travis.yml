@@ -1,0 +1,25 @@
+language: viml
+
+sudo: required
+dist: trusty
+
+os:
+    - linux
+
+before_script:
+    - vim --version
+    - git clone https://github.com/thinca/vim-themis
+
+script:
+    - pip install vim-vint --upgrade
+    - vint --version
+    - vint autoload
+    - export CLANG_RENAME=clang-rename-3.8
+    - $CLANG_RENAME --version
+    - $CLANG_RENAME --help
+    - vim-themis/bin/themis --reporter spec
+
+addons:
+    apt:
+        packages:
+            - clang-3.8
